@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "torch", "ninja"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stable-fast"
+dynamic = ["version"]
+description = "Stable Fast is an ultra lightweight performance optimization framework for Hugging Face diffuser pipelines."
+authors = [
+    {name = "Cheng Zeyi"}
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.7"
+dependencies = [
+    "torch",
+]
+
+[project.optional-dependencies]
+all = []
+dev = [
+    "pytest",
+    "prettytable",
+    "Pillow",
+    "opencv-python",
+    "numpy",
+]
+diffusers = [
+    "diffusers>=0.19.0",
+    "transformers",
+]
+xformers = [
+    "xformers>=0.0.20",
+]
+triton = [
+    "triton>=2.1.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "sfast.__version__"}

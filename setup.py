@@ -69,13 +69,13 @@ def get_extensions():
     extensions_dir = path.join(this_dir, "src", "sfast", "csrc")
     include_dirs = [extensions_dir]
 
-    sources = glob.glob(path.join(extensions_dir, "**", "*.cpp"),
-                        recursive=True)
+    sources = [os.path.relpath(f, this_dir) for f in glob.glob(path.join(extensions_dir, "**", "*.cpp"),
+                        recursive=True)]
     # common code between cuda and rocm platforms, for hipify version [1,0,0] and later.
-    source_cuda = glob.glob(path.join(extensions_dir, "**", "*.cu"),
-                            recursive=True)
-    source_cuda_rt = glob.glob(path.join(extensions_dir, "**", "*.cc"),
-                               recursive=True)
+    source_cuda = [os.path.relpath(f, this_dir) for f in glob.glob(path.join(extensions_dir, "**", "*.cu"),
+                            recursive=True)]
+    source_cuda_rt = [os.path.relpath(f, this_dir) for f in glob.glob(path.join(extensions_dir, "**", "*.cc"),
+                               recursive=True)]
 
     extension = CppExtension
 
@@ -162,7 +162,7 @@ def get_extensions():
             except ImportError:
                 cudnn = None
 
-            if cudnn is not None:
+            if cudnn is not None and cudnn.__file__ is not None:
                 cudnn_dir = os.path.dirname(cudnn.__file__)
                 print("Using CUDNN from {}".format(cudnn_dir))
                 include_dirs.append(os.path.join(cudnn_dir, "include"))
@@ -181,7 +181,7 @@ def get_extensions():
             except ImportError:
                 cublas = None
 
-            if cublas is not None:
+            if cublas is not None and cublas.__file__ is not None:
                 cublas_dir = os.path.dirname(cublas.__file__)
                 print("Using CUBLAS from {}".format(cublas_dir))
                 include_dirs.append(os.path.join(cublas_dir, "include"))
